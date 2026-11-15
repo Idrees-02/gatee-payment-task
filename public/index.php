@@ -18,6 +18,7 @@ View::render('pages/shop', [
 View::render('partials/foot', ['scripts' => [
     'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js',
     'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js',
-    '/assets/js/motion.js?v=8',
-    '/assets/js/checkout.js?v=8',
+    'https://cdn.jsdelivr.net/npm/lenis@1.1.13/dist/lenis.min.js',
+    '/assets/js/motion.js?v=10',
+    '/assets/js/checkout.js?v=10',
 ]]);

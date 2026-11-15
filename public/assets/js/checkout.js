@@ -5,6 +5,8 @@
 $(function () {
   'use strict';
 
+  startAtTheTop();
+
   var $root = $(document.documentElement);
   var $form = $('#checkout-form');
   var $submit = $form.find('[type="submit"]');
@@ -161,7 +163,7 @@ $(function () {
     $gateway.prop('hidden', false);
     lockOrder(true);
     setProgress('payment');
-    $gateway[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
+    scrollToElement($gateway[0]);
   }
 
   function closeGateway() {
@@ -191,6 +193,31 @@ $(function () {
   function setBusy(busy) {
     $submit.prop('disabled', busy).toggleClass('is-busy', busy);
     $submit.find('[data-label]').text(busy ? 'Creating your payment' : 'Continue to payment');
+  }
+
+  /**
+   * A reload always starts at the top of the page. A link from another page that points at a
+   * section (for example "Try again" → /#checkout) still lands there once, and the #hash is then
+   * removed from the address so the next reload starts at the top again.
+   */
+  function startAtTheTop() {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    var target = location.hash ? document.querySelector(location.hash) : null;
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    if (target) {
+      scrollToElement(target);
+    } else {
+      window.scrollTo(0, 0);
+    }
+  }
+
+  /** Uses the page's smooth scroller when it is running, the browser's otherwise. */
+  function scrollToElement(element) {
+    if (window.__lenis) {
+      window.__lenis.scrollTo(element, { offset: -24, duration: 1.2 });
+    } else {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   function showAlert(message) { $alert.text(message).prop('hidden', false); }

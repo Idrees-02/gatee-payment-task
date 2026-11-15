@@ -26,7 +26,7 @@
   --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
   --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
   --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
-  --step-head: clamp(2rem, 1.3rem + 3.2vw, 4rem);
+  --step-head: clamp(1.75rem, 1.25rem + 1.8vw, 2.75rem);
 
   /* Space */
   --margin: clamp(16px, 2.2vw, 32px);
@@ -40,6 +40,7 @@
 *, *::before, *::after { box-sizing: border-box; }
 
 html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html.lenis { scroll-behavior: auto; } /* Lenis drives scrolling on the shop page */
 
 body {
   margin: 0;

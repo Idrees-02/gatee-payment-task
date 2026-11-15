@@ -15,26 +15,55 @@
 
   gsap.registerPlugin(ScrollTrigger);
 
+  smoothScrolling();
   introduceHero();
   driftHeroPhoto();
   assembleHeadphones();
   revealSections();
   slideFooterName();
 
-  /** Signature move: each line of the name rises from behind its own baseline. */
-  function introduceHero() {
-    gsap.timeline({ defaults: { ease: 'power4.out' } })
-      .from('.hero__line > span', { yPercent: 105, duration: 0.9, stagger: 0.11 })
-      .from('.hero__lede > *', { y: 24, opacity: 0, duration: 0.7, stagger: 0.08 }, '-=0.35');
+  /**
+   * Lenis turns wheel and trackpad input into one steady, eased scroll, and GSAP reads that
+   * same position every frame. Even a fast flick reaches the pinned scene at a steady speed,
+   * so the animation never jumps ahead and snaps back.
+   */
+  function smoothScrolling() {
+    if (!window.Lenis) return;
+
+    var lenis = new Lenis({ duration: 1.15, easing: function (t) { return 1 - Math.pow(1 - t, 3); }, smoothWheel: true });
+    window.__lenis = lenis;
+
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(function (time) { lenis.raf(time * 1000); });
+    gsap.ticker.lagSmoothing(0);
+
+    // In-page links (Buy, See what's inside) glide with the same easing.
+    document.addEventListener('click', function (event) {
+      var link = event.target.closest('a[href^="#"], a[href^="/#"]');
+      if (!link) return;
+      var target = document.querySelector(link.getAttribute('href').replace(/^\//, ''));
+      if (!target) return;
+      event.preventDefault();
+      lenis.scrollTo(target, { offset: 0, duration: 1.4 });
+    });
   }
 
+  /**
+   * Signature move: the name rises from behind its baseline,
+   * then the halo is drawn dot by dot over the towers, left to right.
+   */
+  function introduceHero() {
+    gsap.timeline({ defaults: { ease: 'power4.out' } })
+      .from('.hero__line > span', { yPercent: 105, duration: 0.9 })
+      .from('.hero__lede, .hero__action', { y: 20, opacity: 0, duration: 0.7, stagger: 0.08 }, '-=0.45')
+      .from('.hero__halo circle', { scale: 0, opacity: 0, duration: 0.35, ease: 'back.out(3)', stagger: 0.018 }, 0.3);
+  }
+
+  /** The drawing sinks a little slower than the page scrolls; the halo lifts away from it. */
   function driftHeroPhoto() {
-    gsap.fromTo('.hero__photo', { scale: 1.08 }, { scale: 1, duration: 1.6, ease: 'power2.out' });
-    gsap.to('.hero__photo', {
-      yPercent: 12,
-      ease: 'none',
-      scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true },
-    });
+    var scroll = { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true };
+    gsap.to('.hero__art', { yPercent: 8, ease: 'none', scrollTrigger: scroll });
+    gsap.to('.hero__halo', { yPercent: -6, ease: 'none', scrollTrigger: scroll });
   }
 
   /**
@@ -51,23 +80,29 @@
 
     gsap.set(stage.querySelectorAll('.hp-band, .hp-band-inner'), { strokeDasharray: 1, strokeDashoffset: 1 });
 
+    var isDesktop = window.matchMedia('(min-width: 861px)').matches;
+
+    // Scrub is tied 1:1 to the (already smoothed) scroll position: the drawing is always exactly
+    // where the scroll says it should be, at any speed, in both directions.
     var timeline = gsap.timeline({
-      defaults: { ease: 'none' },
+      defaults: { ease: 'power1.inOut' },
       scrollTrigger: {
         trigger: stage,
-        start: window.matchMedia('(min-width: 861px)').matches ? 'top top' : 'top 70%',
-        end: '+=110%',
-        pin: window.matchMedia('(min-width: 861px)').matches,
-        scrub: 0.6,
+        start: isDesktop ? 'top top' : 'top 75%',
+        end: isDesktop ? '+=120%' : 'bottom 40%',
+        pin: isDesktop,
+        anticipatePin: 1,
+        scrub: true,
+        invalidateOnRefresh: true,
         onUpdate: function (self) { highlightStep(steps, self.progress); },
       },
     });
 
     timeline
       .to(stage.querySelector('.hp-band'), { strokeDashoffset: 0, duration: 1 })
-      .to(stage.querySelector('.hp-band-inner'), { strokeDashoffset: 0, duration: 0.6 }, '-=0.4')
-      .from(stage.querySelector('[data-part="cup-left"]'), { x: -160, opacity: 0, duration: 0.8 }, '>-0.1')
-      .from(stage.querySelector('[data-part="cup-right"]'), { x: 160, opacity: 0, duration: 0.8 }, '<')
+      .to(stage.querySelector('.hp-band-inner'), { strokeDashoffset: 0, duration: 0.6 }, '-=0.5')
+      .fromTo(stage.querySelector('[data-part="cup-left"]'), { x: -90 }, { x: 0, duration: 0.8 }, '-=0.3')
+      .fromTo(stage.querySelector('[data-part="cup-right"]'), { x: 90 }, { x: 0, duration: 0.8 }, '<')
       .to(noise, {
         amplitude: 0,
         duration: 1,

@@ -36,15 +36,17 @@ $features = [
 <main id="main">
 
   <section class="hero" aria-labelledby="hero-title">
-    <img class="hero__photo" src="/assets/img/manama-skyline.jpg" width="1920" height="1183"
-         alt="The Manama skyline and the Bahrain World Trade Center across turquoise water" fetchpriority="high">
-    <h1 class="hero__title" id="hero-title">
-      <span class="hero__line hero__line--top"><span>Halo</span></span>
-      <span class="hero__line hero__line--bottom"><span>One</span></span>
-    </h1>
-    <div class="hero__lede">
-      <p>Over-ear headphones that turn a loud street into the sound of the sea. <?= e(money($product->unitPrice)) ?>, delivered anywhere in Bahrain.</p>
-      <a class="button button--solid" href="#checkout">Buy Halo One</a>
+    <div class="hero__scene">
+      <img class="hero__art" src="/assets/img/manama-line.jpg" width="1992" height="1182" fetchpriority="high"
+           alt="Line drawing of the Manama skyline with the Bahrain World Trade Center">
+      <?php require __DIR__ . '/../partials/halo-arc.php'; ?>
+    </div>
+    <div class="hero__content">
+      <h1 class="hero__title" id="hero-title">
+        <span class="hero__line"><span>Halo One</span></span>
+      </h1>
+      <p class="hero__lede">Over-ear headphones that turn a loud city into a quiet room. <?= e(money($product->unitPrice)) ?>, delivered anywhere in Bahrain.</p>
+      <a class="button button--solid hero__action" href="#checkout">Buy Halo One</a>
     </div>
   </section>
 
@@ -116,12 +118,12 @@ $features = [
   <section class="places" aria-labelledby="places-title">
     <h2 id="places-title">Made for wherever it gets loud</h2>
     <p class="places__lede">Noise cancelling that follows you from the office to the airport, and switches itself off when you take them off.</p>
-    <figure class="places__wide">
-      <img src="/assets/img/sitra-harbour.jpg" width="1920" height="1425" loading="lazy" alt="Wooden dhows moored side by side in Sitra harbour">
+    <figure class="places__photo">
+      <div class="places__frame"><img src="/assets/img/sitra-harbour.jpg" width="1920" height="1425" loading="lazy" alt="Wooden dhows moored side by side in Sitra harbour"></div>
       <figcaption>Dhows in Sitra harbour.</figcaption>
     </figure>
-    <figure class="places__narrow">
-      <img src="/assets/img/boat-dusk.jpg" width="1920" height="1280" loading="lazy" alt="A fishing boat moored on the shore at dusk against a calm sea">
+    <figure class="places__photo">
+      <div class="places__frame"><img src="/assets/img/boat-dusk.jpg" width="1920" height="1280" loading="lazy" alt="A fishing boat moored on the shore at dusk against a calm sea"></div>
       <figcaption>A fishing boat at dusk.</figcaption>
     </figure>
   </section>
@@ -225,7 +227,7 @@ $features = [
     <p class="site-foot__name" aria-hidden="true">Halo</p>
     <div class="site-foot__meta">
       <p>Halo Audio, Manama. A demo shop for the Gate-E payment integration; payments run in the Gate-E sandbox.</p>
-      <p>Photographs: “Manama Skyline 15” and “Sitra Dhow Harbour 09” by Zairon, CC BY-SA 4.0, Wikimedia Commons · “Malkiya Beach, Bahrain” by Shahana, CC0, WordPress Photo Directory · “A fishing boat moored on the shore at dusk” by PattayaPatrol, CC BY-SA 4.0, Wikimedia Commons.</p>
+      <p>Photographs: “Sitra Dhow Harbour 09” by Zairon, CC BY-SA 4.0, Wikimedia Commons · “Malkiya Beach, Bahrain” by Shahana, CC0, WordPress Photo Directory · “A fishing boat moored on the shore at dusk” by PattayaPatrol, CC BY-SA 4.0, Wikimedia Commons.</p>
     </div>
   </footer>
 </main>

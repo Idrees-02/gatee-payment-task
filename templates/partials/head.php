@@ -18,8 +18,8 @@
   <?php if ($page === 'page-app'): ?>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <?php endif; ?>
-  <link href="/assets/css/base.css?v=8" rel="stylesheet">
-  <link href="/assets/css/<?= $page === 'page-shop' ? 'shop' : 'app' ?>.css?v=8" rel="stylesheet">
+  <link href="/assets/css/base.css?v=10" rel="stylesheet">
+  <link href="/assets/css/<?= $page === 'page-shop' ? 'shop' : 'app' ?>.css?v=10" rel="stylesheet">
 </head>
 <body class="<?= e($page) ?>">
 <a class="skip-link" href="#main">Skip to content</a>

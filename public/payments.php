@@ -13,5 +13,5 @@ View::render('pages/payments', [
 ]);
 View::render('partials/foot', ['scripts' => [
     'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js',
-    '/assets/js/payments.js?v=8',
+    '/assets/js/payments.js?v=10',
 ]]);

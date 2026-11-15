@@ -14,7 +14,8 @@ const APP = process.env.APP_URL ?? 'http://localhost:8090';
 const PMA = process.env.PMA_URL ?? 'http://localhost:8091';
 const CHROME = process.env.CHROME ?? '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
 const PORT = 9333;
-const OUT = new URL('../screenshots/', import.meta.url);
+const OUT = process.env.SHOTS_DIR ? new URL(`file://${process.env.SHOTS_DIR.replace(/\/?$/, '/')}`) : new URL('../screenshots/', import.meta.url);
+const ONLY = process.env.SHOTS_ONLY?.split(',');  // e.g. SHOTS_ONLY=01,02 to capture a subset
 
 const shots = [
   { file: '01-product-hero.png', url: `${APP}/` , wait: 2500 },
@@ -68,7 +69,7 @@ try {
   await cdp.send('Page.enable');
   await cdp.send('Runtime.enable');
 
-  for (const shot of shots) {
+  for (const shot of shots.filter((s) => !ONLY || ONLY.some((p) => s.file.startsWith(p)))) {
     const width = shot.mobile ? 390 : 1440;
     const height = shot.mobile ? 844 : 900;
     await cdp.send('Emulation.setDeviceMetricsOverride', { width, height, deviceScaleFactor: shot.mobile ? 3 : 2, mobile: !!shot.mobile });
